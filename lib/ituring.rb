@@ -6,15 +6,20 @@ require "parallel"
 module Ituring
 
   URL = 'http://www.ituring.com.cn'
+  MAX = 999999999999
 
-  def self.newest page: Float::INFINITY
+  def self.newest pages: MAX, books: MAX
+    pages = books / 20 if books < MAX
+
     nodes = ::PageByPage.fetch do
       url 'http://www.ituring.com.cn/book?tab=book&sort=new&page=<%= n %>'
       selector '.block-books li'
       from 0
-      to page
+      to pages
       threads Parallel.processor_count
     end
+
+    nodes = nodes[0...books]
 
     pg = Progress.new nodes.size
 
