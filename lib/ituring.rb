@@ -7,11 +7,12 @@ module Ituring
 
   URL = 'http://www.ituring.com.cn'
 
-  def self.all
+  def self.newest page: Float::INFINITY
     nodes = ::PageByPage.fetch do
       url 'http://www.ituring.com.cn/book?tab=book&sort=new&page=<%= n %>'
       selector '.block-books li'
       from 0
+      to page
       threads Parallel.processor_count
     end
 
