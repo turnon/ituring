@@ -37,7 +37,7 @@ module Ituring
           when '电子书'
             @ebook_price = dd.text.gsub(/[^\d\.]/, '').to_f
           when '格式'
-            @ebook_formats = dd.text.split(/\//).map(&:strip)
+            @ebook_formats = dd.text.strip.split(/[^\w\d]+/)
           when '纸质版定价'
             @hard_copy_price = dd.text.gsub(/[^\d\.]/, '').to_f
           end
