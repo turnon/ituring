@@ -31,7 +31,7 @@ module Ituring
 
   def self.dump path
     File.open(Pathname.new(path), 'w') do |f|
-      books = all
+      books = newest
       str = Marshal.dump books
       f.puts str
     end
