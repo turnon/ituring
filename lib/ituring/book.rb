@@ -12,6 +12,9 @@ module Ituring
     def initialize node
       @url = URL + node.at_css('a')['href']
       get_detail
+    rescue => e
+      STDERR.puts "#{url} : #{e}"
+      raise e
     end
 
     def get_detail
@@ -47,17 +50,22 @@ module Ituring
         each do |li|
           case li.at_css('strong').text
           when '系列书名'
-            @series = li.inner_html().gsub(/.*<\/strong>/, '')
+            @series = extract_info li
           when '出版日期'
-            @date = li.inner_html().gsub(/.*<\/strong>/, '')
+            @date = extract_info li
           when '书　　号'
-            @isbn = li.inner_html().gsub(/.*<\/strong>/, '').gsub(/[^\d-]/, '')
+            @isbn = extract_info(li).gsub(/[^\d-]/, '')
           when '原书名'
-            @org_name = li.at_css('a').text
+            @org_name = extract_info li
           when '原书号'
-            @org_isbn = li.at_css('a').text.gsub(/[^\d-]/, '')
+            @org_isbn = extract_info(li).gsub(/[^\d-]/, '')
           end
         end
+    end
+
+    def extract_info li
+      a = li.at_css('a')
+      a ? a.text : li.inner_html().gsub(/.*<\/strong>/, '')
     end
 
     def marshal_dump
