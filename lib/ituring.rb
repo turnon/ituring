@@ -30,11 +30,12 @@ module Ituring
   end
 
   def self.dump path
+    books = newest
     File.open(Pathname.new(path), 'w') do |f|
-      books = newest
       str = Marshal.dump books
       f.puts str
     end
+    books
   end
 
   def self.load path
